@@ -1,7 +1,0 @@
-services:
-  kestra:
-    image: kestra/kestra:latest
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./kestra-data:/app/storage
