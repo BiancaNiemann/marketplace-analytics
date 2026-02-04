@@ -7,6 +7,6 @@ marketplace_dbt:
       project: marketplace-analytics-485915
       dataset: analytics
       threads: 4
-      keyfile: /opt/airflow/.dbt/service-account-key.json
+      keyfile: /opt/airflow/.dbt/service-account-key.json 
       location: EU
     
