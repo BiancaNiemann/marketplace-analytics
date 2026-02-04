@@ -1,0 +1,12 @@
+marketplace_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: marketplace-analytics-485915
+      dataset: analytics
+      threads: 4
+      keyfile: /opt/airflow/.dbt/service-account-key.json
+      location: EU
+    

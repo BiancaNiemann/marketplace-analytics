@@ -18,6 +18,8 @@ venv/
 *.key
 *.keys
 *.pemrm -rf .git
+dbt_profiles/service-account-key.json
+dbt_profiles/*.json
 
 
 # --- Data files ---

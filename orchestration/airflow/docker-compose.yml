@@ -10,7 +10,7 @@ services:
     restart: always
 
   airflow-webserver:
-    image: apache/airflow:2.10.2-python3.11
+    build: .
     depends_on:
       - postgres
     environment:
@@ -19,27 +19,37 @@ services:
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__WEBSERVER__RBAC: 'true'
       AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+      AIRFLOW__WEBSERVER__SECRET_KEY: "my_airflow_secret_123"
+      # dbt environment variables
+      DBT_PROFILES_DIR: /opt/airflow/.dbt
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/.dbt/service-account-key.json
     volumes:
       - ./dags:/opt/airflow/dags
-      - ../../transform/marketplace_dbt:/opt/airflow/dbt
-      - ~/.dbt:/opt/airflow/.dbt
+      - ../../marketplace_dbt:/opt/airflow/dbt
+      - ./dbt_profiles:/opt/airflow/.dbt  # Changed from ~/.dbt
+      - ./logs:/opt/airflow/logs
     ports:
       - "8080:8080"
-    command: webserver
+    command: ["airflow", "webserver"]
     restart: always
 
   airflow-scheduler:
-    image: apache/airflow:2.10.2-python3.11
+    build: .
     depends_on:
       - postgres
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: "my_airflow_secret_123"
+      # dbt environment variables
+      DBT_PROFILES_DIR: /opt/airflow/.dbt
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/.dbt/service-account-key.json
     volumes:
       - ./dags:/opt/airflow/dags
-      - ../../transform/marketplace_dbt:/opt/airflow/dbt
-      - ~/.dbt:/opt/airflow/.dbt
-    command: scheduler
+      - ../../marketplace_dbt:/opt/airflow/dbt
+      - ./dbt_profiles:/opt/airflow/.dbt  # Changed from ~/.dbt
+      - ./logs:/opt/airflow/logs
+    command: ["airflow", "scheduler"]
     restart: always
 
 volumes:
