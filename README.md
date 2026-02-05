@@ -31,7 +31,65 @@ This project demonstrates a complete modern data engineering workflow that simul
 
 ## 🗺️ Architecture
 
+```mermaid
+flowchart TD
+    subgraph Data_Generation["🧪 Data Generation (Python + Faker)"]
+        A1["Generate Fake CSV Files"]
+    end
 
+    subgraph Storage["🗄️ Google Cloud Storage / Local"]
+        B1["Raw CSV Files"]
+    end
+
+    subgraph BigQuery["🗄️ Google BigQuery"]
+        C1["Raw Dataset"]
+        C2["Analytics Dataset"]
+    end
+
+    subgraph dbt["🧠 dbt Core"]
+        D1["Staging Models (stg_*)"]
+        D2["Analytics Models"]
+        D3["Tests & Documentation"]
+    end
+
+    subgraph Airflow["🌬️ Apache Airflow"]
+        E1["dbt deps"]
+        E2["dbt run"]
+        E3["dbt test"]
+        E4["Load CSV to BigQuery"]
+    end
+
+    subgraph Terraform["🧱 Terraform"]
+        F1["Create BigQuery Datasets"]
+        F2["Create Service Accounts"]
+        F3["Assign IAM Permissions"]
+    end
+
+    subgraph Docker["🐳 Docker Compose"]
+        G1["Airflow Webserver"]
+        G2["Airflow Scheduler"]
+        G3["Postgres Metadata DB"]
+        G4["dbt Runtime Environment"]
+    end
+
+    A1 --> B1
+    B1 --> C1
+    C1 --> D1
+    D1 --> D2
+    D2 --> C2
+
+    E1 --> E2 --> E3
+    E4 --> C1
+    E2 --> C2
+
+    F1 --> C1
+    F1 --> C2
+    F2 --> Airflow
+    F3 --> BigQuery
+
+    Docker --> Airflow
+    Docker --> dbt
+```
 
 **Data Flow:**
 ```
