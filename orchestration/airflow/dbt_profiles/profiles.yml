@@ -7,6 +7,15 @@ marketplace_dbt:
       project: marketplace-analytics-485915
       dataset: analytics
       threads: 4
-      keyfile: /opt/airflow/.dbt/service-account-key.json 
+      keyfile: /Users/biancaniemann/.keys/service-account-key.json 
       location: EU
+
+    prod:
+      type: bigquery
+      method: service-account
+      keyfile: /opt/airflow/dbt_profiles/service-account-key.json  # Docker path
+      project: marketplace-analytics-485915
+      dataset: analytics
+      threads: 4
+      timeout_seconds: 300
     

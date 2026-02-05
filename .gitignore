@@ -17,10 +17,8 @@ venv/
 *.env
 *.key
 *.keys
-*.pemrm -rf .git
 dbt_profiles/service-account-key.json
 dbt_profiles/*.json
-
 
 # --- Data files ---
 *.csv
@@ -39,7 +37,14 @@ Thumbs.db
 
 # --- Terraform ---
 **/.terraform/*
-**/.terraform/*
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+
+# --- DBT ---
+**/target/
+**/logs/
+**/dbt_packages/
+
+# --- Airflow ---
+orchestration/airflow/logs/
