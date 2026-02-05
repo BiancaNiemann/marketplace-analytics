@@ -26,7 +26,8 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - ../../marketplace_dbt:/opt/airflow/dbt
-      - ./dbt_profiles:/opt/airflow/.dbt  # Changed from ~/.dbt
+      - ./dbt_profiles:/opt/airflow/.dbt
+      - ~/.keys/service-account-key.json:/opt/airflow/.dbt/service-account-key.json:ro
       - ./logs:/opt/airflow/logs
     ports:
       - "8080:8080"
@@ -47,7 +48,8 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - ../../marketplace_dbt:/opt/airflow/dbt
-      - ./dbt_profiles:/opt/airflow/.dbt  # Changed from ~/.dbt
+      - ./dbt_profiles:/opt/airflow/.dbt
+      - ~/.keys/service-account-key.json:/opt/airflow/.dbt/service-account-key.json:ro
       - ./logs:/opt/airflow/logs
     command: ["airflow", "scheduler"]
     restart: always

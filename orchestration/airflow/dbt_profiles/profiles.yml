@@ -7,15 +7,16 @@ marketplace_dbt:
       project: marketplace-analytics-485915
       dataset: analytics
       threads: 4
-      keyfile: /Users/biancaniemann/.keys/service-account-key.json 
+      keyfile: /opt/airflow/.dbt/service-account-key.json  # Changed to container path
       location: EU
 
     prod:
       type: bigquery
       method: service-account
-      keyfile: /opt/airflow/dbt_profiles/service-account-key.json  # Docker path
+      keyfile: /opt/airflow/.dbt/service-account-key.json  # Updated to match volume mount
       project: marketplace-analytics-485915
       dataset: analytics
       threads: 4
+      location: EU
       timeout_seconds: 300
     
