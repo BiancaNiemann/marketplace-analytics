@@ -14,6 +14,24 @@ provider "google" {
   region      = var.region
 }
 
+resource "google_storage_bucket" "data_lake" {
+  name          = "${var.project}-data-lake"
+  location      = var.region
+  storage_class = var.gsc_storage_class
+  
+  uniform_bucket_level_access = true
+  
+  versioning {
+    enabled = true
+  }
+}
+
+resource "google_storage_bucket_iam_member" "dbt_bucket_access" {
+  bucket = google_storage_bucket.data_lake.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.dbt.email}"
+}
+
 resource "google_bigquery_dataset" "raw" {
   dataset_id = var.raw_dataset_name
   location   = var.location

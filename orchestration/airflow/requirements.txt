@@ -1,0 +1,5 @@
+faker
+pandas
+numpy
+python-dotenv
+dbt-bigquery==1.11.0

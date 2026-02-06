@@ -127,13 +127,14 @@ marketplace-analytics/
 │       ├── docker-compose.yml        # Airflow services
 │       └── Dockerfile                # Custom Airflow image
 │
-├── infrastructure/                    # Terraform IaC
+├── infrastructure/                   # Terraform IaC
 │   └── terraform/
 │       ├── main.tf                   # Main infrastructure config
 │       ├── variables.tf              # Input variables
 │       └── outputs.tf                # Output values
 │
 ├── .gitignore                        # Git ignore rules
+├── requirements.txt
 └── README.md                         # This file
 ```
 

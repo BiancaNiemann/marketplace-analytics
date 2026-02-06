@@ -1,6 +1,6 @@
 variable "credentials" {
   description = "My Credentials"
-  default     = "/Users/biancaniemann/.keys/secret_key.json"
+  default     = "/Users/biancaniemann/.keys/service-account-key.json"
 }
 
 variable "project" {

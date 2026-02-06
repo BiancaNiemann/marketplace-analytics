@@ -1,6 +1,7 @@
 dbt-bigquery==1.11.0 
 google-cloud-bigquery 
 google-cloud-storage 
+apache-airflow-providers-google==10.21.0
 pandas 
 numpy 
 faker 
