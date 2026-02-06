@@ -863,34 +863,6 @@ Potential improvements for this project:
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! If you'd like to improve this project:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Make your changes** and commit
-   ```bash
-   git commit -m 'Add amazing feature'
-   ```
-4. **Push to your branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
-
-### Contribution Guidelines
-
-- Follow PEP 8 for Python code
-- Use meaningful commit messages
-- Add tests for new features
-- Update documentation as needed
-
----
-
 ## 📝 License
 
 This project is open source and available under the MIT License for educational purposes.
