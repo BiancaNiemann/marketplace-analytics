@@ -50,7 +50,7 @@ with DAG(
             source_format='CSV',
             skip_leading_rows=1,
             autodetect=True,
-            write_disposition='WRITE_TRUNCATE',
+            write_disposition='WRITE_APPEND', # Append to existing data becareful not to duplicate the month
             create_disposition='CREATE_IF_NEEDED',
             gcp_conn_id='google_cloud_default',
         )
