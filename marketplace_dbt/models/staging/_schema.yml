@@ -1,0 +1,194 @@
+models:
+  - name: stg_clicks
+    description: "Staging model for clicks data, cleaned and standardized for analysis."
+    columns:
+      - name: click_id
+        description: "Unique identifier for each click event."
+        tests:
+          - unique
+          - not_null
+      - name: search_id
+        description: "Identifier for the search that generated the click."
+      - name: item_id
+        description: "Identifier for the item that was clicked."
+      - name: position
+        description: "The position of the item in the search results when it was clicked."
+      - name: clicked_at
+        description: "The timestamp when the click event occurred."
+
+  - name: stg_impressions
+    description: "Staging model for impressions data, cleaned and standardized for analysis."
+    columns:
+      - name: impression_id
+        description: "Unique identifier for each impression event."
+        tests:
+          - unique
+          - not_null
+      - name: search_id
+        description: "Identifier for the search that generated the impression."
+      - name: item_id
+        description: "Identifier for the item that was impressed."
+      - name: position
+        description: "The position of the item in the search results when it was impressed."
+      - name: impression_at
+        description: "The timestamp when the impression event occurred."
+
+  - name: stg_items
+    description: "Staging model for items data, cleaned and standardized for analysis."
+    columns:
+      - name: item_id
+        description: "Unique identifier for each item."
+        tests:
+          - unique
+          - not_null
+      - name: seller_id
+        description: "Identifier for the seller of the item."
+      - name: item_title
+        description: "The title of the item."
+      - name: category
+        description: "The category of the item."
+      - name: price
+        description: "The price of the item."
+      - name: created_at
+        description: "The timestamp when the item was created."
+      - name: status
+        description: "The status of the item (e.g., active, inactive)."
+        tests:
+          - accepted_values:
+              values: ['active', 'sold', 'removed']
+
+  - name: stg_lifecycle_events
+    description: "Staging model for lifecycle event data from the source system."
+    columns:
+      - name: event_id
+        description: "Unique identifier for each lifecycle event."
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "Identifier for the user associated with the lifecycle event."
+        tests:
+          - not_null
+      - name: event_type
+        description: "The type of lifecycle event (e.g., activation, churn, reactivation)."
+        tests:
+          - accepted_values:
+              values: ['activation', 'churn', 'reactivation']
+      - name: event_at
+        description: "The timestamp when the lifecycle event occurred."
+
+  - name: stg_notifications
+    description: "Staging model for notification data from the source system."
+    columns:
+      - name: notification_id
+        description: "Unique identifier for each notification event."
+        tests:
+           - unique
+           - not_null
+      - name: user_id
+        description: "Identifier for the user associated with the notification event."
+        tests:
+          - not_null
+      - name: notification_type
+        description: "The type of notification (e.g., new message, price_drop, promo, reactivation)."
+        tests:
+          - accepted_values:
+              values: ['new_message', 'price_drop', 'promo', 'reactivation']
+      - name: sent_at
+        description: "The timestamp when the notification event occurred."
+      - name: notification_opened
+        description: "Boolean indicating whether the notification was opened by the user."
+
+  - name: stg_purchases
+    description: "Staging model for purchase data from the source system."
+    columns:
+      - name: purchase_id
+        description: "Unique identifier for each purchase event."
+        tests:
+          - unique
+          - not_null
+      - name: buyer_id
+        description: "Identifier for the user who made the purchase."
+        tests:
+          - not_null
+      - name: item_id
+        description: "Identifier for the item that was purchased."
+        tests:
+           - not_null
+      - name: price
+        description: "The price at which the item was purchased."
+        tests:
+           - not_null
+      - name: purchased_at
+        description: "The timestamp when the purchase event occurred."
+        tests:
+          - not_null
+
+  - name: stg_search_events
+    description: "Staging model for search event data from the source system."
+    columns:
+      - name: search_id
+        description: "Unique identifier for each search event."
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "Identifier for the user who performed the search."
+        tests:
+          - not_null
+      - name: search_query
+        description: "The search query entered by the user."
+        tests:
+          - not_null
+      - name: searched_at
+        description: "The timestamp when the search event occurred."
+
+  - name: stg_users
+    description: "Staging model for user data from the source system."
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user."
+        tests:
+          - unique
+          - not_null  
+      - name: signup_at
+        description: "The timestamp when the user signed up."
+        tests:
+          - not_null
+      - name: country
+        description: "The country of the user."
+        tests:
+          - not_null
+      - name: city
+        description: "The city of the user."
+        tests:
+          - not_null
+      - name: age_group
+        description: "The age group of the user (e.g., 18-24, 25-34, 35-44, etc.)."
+        tests:
+          - not_null
+      - name: is_seller
+        description: "Boolean indicating whether the user is a seller."
+        tests:
+          - not_null
+      - name: account_type
+        description: "The type of user account (e.g., basic, premium)."
+        tests:
+          - accepted_values:
+              values: ['basic', 'premium']
+      - name: signup_channel
+        description: "The channel through which the user signed up (e.g., organic, paid, referral)."
+      - name: device_type
+        description: "The type of device used by the user (e.g., mobile, desktop, tablet)."
+        tests:
+          - accepted_values:
+              values: ['mobile', 'desktop', 'tablet']
+      - name: marketing_opt_in
+        description: "Boolean indicating whether the user has opted in for marketing communications."
+      - name: is_verified
+        description: "Boolean indicating whether the user's email or phone number is verified."
+      - name: status
+        description: "The status of the user account (e.g., active, inactive, suspended)."
+
+
+      

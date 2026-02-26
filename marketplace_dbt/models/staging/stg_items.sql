@@ -1,9 +1,9 @@
-SELECT
-    CAST(item_id AS INT64) AS item_id,
-    CAST(seller_id AS INT64) AS seller_id,
-    title AS item_title,
+select
+    cast(item_id as int64) as item_id,
+    cast(seller_id as int64) as seller_id,
+    title as item_title,
     category,
-    CAST(price AS NUMERIC) AS price,
-    CAST(created_ts AS TIMESTAMP) AS created_at,
+    cast(price as numeric) as price,
+    cast(created_ts as timestamp) as created_at,
     status
-FROM {{ source('raw', 'items') }}
+from {{ source('raw', 'items') }}

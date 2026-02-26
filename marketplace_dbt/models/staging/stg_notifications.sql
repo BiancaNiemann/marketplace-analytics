@@ -1,7 +1,7 @@
-SELECT
-    CAST(notification_id AS INT64) AS notification_id,
-    CAST(user_id AS INT64) AS user_id,
-    type AS notification_type,
-    CAST(sent_ts AS TIMESTAMP) AS sent_at,
-    CAST(opened AS BOOLEAN) AS notification_opened
-FROM {{ source('raw', 'notifications') }}
+select
+    cast(notification_id as int64) as notification_id,
+    cast(user_id as int64) as user_id,
+    type as notification_type,
+    cast(sent_ts as timestamp) as sent_at,
+    cast(opened as boolean) as notification_opened
+from {{ source('raw', 'notifications') }}

@@ -1,7 +1,7 @@
-SELECT
-    CAST(purchase_id AS INT64) AS purchase_id,
-    CAST(buyer_id AS INT64) AS buyer_id,
-    CAST(item_id AS INT64) AS item_id,
-    CAST(price AS NUMERIC) AS price,
-    CAST(purchase_ts AS TIMESTAMP) AS purchased_at
-FROM {{ source('raw', 'purchases') }}
+select
+    cast(purchase_id as int64) as purchase_id,
+    cast(buyer_id as int64) as buyer_id,
+    cast(item_id as int64) as item_id,
+    cast(price as numeric) as price,
+    cast(purchase_ts as timestamp) as purchased_at
+from {{ source('raw', 'purchases') }}

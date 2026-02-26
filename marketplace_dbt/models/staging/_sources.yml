@@ -3,6 +3,7 @@ sources:
     database: marketplace-analytics-485915
     schema: raw
     tables:
+
       - name: clicks
         description: "Raw click data from the source system."
         columns:
@@ -19,6 +20,7 @@ sources:
             description: "The position of the item in the search results when it was clicked."
           - name: click_ts
             description: "The timestamp when the click event occurred."
+
       - name: impressions
         description: "Raw impression data from the source system."
         columns:
@@ -35,6 +37,7 @@ sources:
             description: "The position of the item in the search results when it was impressed."
           - name: timestamp
             description: "The timestamp when the impression event occurred."
+
       - name: items
         description: "Raw item data from the source system."
         columns:
@@ -66,6 +69,7 @@ sources:
             tests:
               - accepted_values:
                   values: ['active', 'sold', 'removed']
+
       - name: lifecycle_events
         description: "Raw lifecycle event data from the source system."
         columns:
@@ -79,9 +83,13 @@ sources:
             tests:
               - not_null
           - name: event_type
-            description: "The type of lifecycle event (e.g., created, updated, deleted)."
+            description: "The type of lifecycle event (e.g., activation, churn, reactivation)."
+            tests:
+              - accepted_values:
+                  values: ['activation', 'churn', 'reactivation']
           - name: timestamp
             description: "The timestamp when the lifecycle event occurred."
+
       - name: notifications
         description: "Raw notification data from the source system."
         columns:
@@ -103,6 +111,7 @@ sources:
             description: "The timestamp when the notification event occurred."
           - name: opened
             description: "Boolean indicating whether the notification was opened by the user."
+
       - name: purchases
         description: "Raw purchase data from the source system."
         columns:
@@ -127,6 +136,7 @@ sources:
             description: "The timestamp when the purchase event occurred."
             tests:
               - not_null
+
       - name: search_events
         description: "Raw search event data from the source system."
         columns:
@@ -145,6 +155,7 @@ sources:
               - not_null
           - name: timestamp
             description: "The timestamp when the search event occurred."
+            
       - name: users
         description: "Raw user data from the source system."
         columns:
