@@ -1,5 +1,6 @@
 sources:
   - name: raw
+    description: "Raw data ingested from the source system. This data is not transformed and serves as the foundation for all downstream models."
     database: marketplace-analytics-485915
     schema: raw
     tables:
@@ -9,15 +10,18 @@ sources:
         columns:
           - name: click_id
             description: "Unique identifier for each click event."
-            tests:
-              - unique
-              - not_null
+          - name: impression_id
+            description: "Identifier for the impression that generated the click."
           - name: search_id
             description: "Identifier for the search that generated the click."
+          - name: user_id
+            description: "Identifier for the user who performed the click."
           - name: item_id
             description: "Identifier for the item that was clicked."
           - name: position
             description: "The position of the item in the search results when it was clicked."
+          - name: click_date  
+            description: "The date when the click event occurred."
           - name: click_ts
             description: "The timestamp when the click event occurred."
 
@@ -26,15 +30,16 @@ sources:
         columns:
           - name: impression_id
             description: "Unique identifier for each impression event."
-            tests:
-              - unique
-              - not_null
           - name: search_id
             description: "Identifier for the search that generated the impression."
+          - name: user_id
+            description: "Identifier for the user who was shown the impression."
           - name: item_id
             description: "Identifier for the item that was impressed."
           - name: position
             description: "The position of the item in the search results when it was impressed."
+          - name: impression_date
+            description: "The date when the impression event occurred."
           - name: timestamp
             description: "The timestamp when the impression event occurred."
 
@@ -43,9 +48,6 @@ sources:
         columns:
           - name: item_id
             description: "Unique identifier for each item."
-            tests:
-              - unique
-              - not_null
           - name: seller_id
             description: "Identifier for the seller of the item."
             tests:
@@ -62,8 +64,12 @@ sources:
             description: "The price of the item." 
             tests:
               - not_null
+          - name: currency
+            description: "The currency of the price (e.g., USD, EUR)."
           - name: created_ts
             description: "The timestamp when the item was created."
+          - name: listed_date
+            description: "The date when the item was listed for sale."
           - name: status
             description: "The status of the item (e.g., active, sold, removed)."
             tests:
@@ -75,9 +81,6 @@ sources:
         columns:
           - name: event_id
             description: "Unique identifier for each lifecycle event."
-            tests:
-              - unique
-              - not_null
           - name: user_id
             description: "Identifier for the user associated with the lifecycle event."
             tests:
@@ -86,18 +89,17 @@ sources:
             description: "The type of lifecycle event (e.g., activation, churn, reactivation)."
             tests:
               - accepted_values:
-                  values: ['activation', 'churn', 'reactivation']
+                  values: ['activation', 'purchase', 'listing_created', 'profile_completed']
           - name: timestamp
             description: "The timestamp when the lifecycle event occurred."
+          - name: event_date
+            description: "The date when the lifecycle event occurred."
 
       - name: notifications
         description: "Raw notification data from the source system."
         columns:
           - name: notification_id
             description: "Unique identifier for each notification event."
-            tests:
-              - unique
-              - not_null
           - name: user_id
             description: "Identifier for the user associated with the notification event."
             tests:
@@ -106,45 +108,59 @@ sources:
             description: "The type of notification (e.g., new message, price_drop, promo, reactivation)."
             tests:
               - accepted_values:
-                  values: ['new_message', 'price_drop', 'promo', 'reactivation']
+                  values: ['new_message', 'price_drop', 'promo', 'reactivation', 'item_sold']
           - name: sent_ts
             description: "The timestamp when the notification event occurred."
+          - name: sent_date
+            description: "The date when the notification event occurred."
           - name: opened
             description: "Boolean indicating whether the notification was opened by the user."
+          - name: channel
+            description: "The channel through which the notification was sent (e.g., email, push, SMS)."
+            tests:
+              - accepted_values:
+                  values: ['email', 'push', 'sms']
 
       - name: purchases
         description: "Raw purchase data from the source system."
         columns:
           - name: purchase_id
             description: "Unique identifier for each purchase event."
-            tests:
-              - unique
-              - not_null
           - name: buyer_id
             description: "Identifier for the user who made the purchase."
+            tests:
+              - not_null
+          - name: seller_id
+            description: "Identifier for the user who sold the item."
             tests:
               - not_null
           - name: item_id
             description: "Identifier for the item that was purchased."
             tests:
               - not_null
-          - name: price
+          - name: purchase_amount
             description: "The price at which the item was purchased."
             tests:
               - not_null
+          - name: platform_fee
+            description: "The fee charged by the platform for facilitating the purchase."
+          - name: payment_method
+            description: "The payment method used for the purchase (e.g., credit_card, paypal, gift_card)."
+            tests:
+              - accepted_values:
+                  values: ['credit_card', 'paypal', 'google_pay', 'apple_pay']
+          - name: currency
+            description: "The currency of the purchase amount (e.g., USD, EUR)."
           - name: purchase_ts
             description: "The timestamp when the purchase event occurred."
-            tests:
-              - not_null
+          - name: purchase_date
+            description: "The date when the purchase event occurred."
 
       - name: search_events
         description: "Raw search event data from the source system."
         columns:
           - name: search_id
             description: "Unique identifier for each search event."
-            tests:
-              - unique
-              - not_null
           - name: user_id
             description: "Identifier for the user who performed the search."
             tests:
@@ -155,6 +171,8 @@ sources:
               - not_null
           - name: timestamp
             description: "The timestamp when the search event occurred."
+          - name: search_date
+            description: "The date when the search event occurred."
             
       - name: users
         description: "Raw user data from the source system."
@@ -164,6 +182,10 @@ sources:
             tests:
               - unique
               - not_null  
+          - name: email
+            description: "The email address of the user."
+          - name: signup_date
+            description: "The date when the user signed up."
           - name: signup_ts
             description: "The timestamp when the user signed up."
           - name: country

@@ -6,9 +6,9 @@ with user_base as (
 user_activity as (
     select
         user_id,
-        min(event_at) as first_event_date,
-        max(event_at) as last_event_date,
-        count(DISTINCT event_at) as days_active
+        min(event_date) as first_event_date,
+        max(event_date) as last_event_date,
+        count(DISTINCT event_date) as days_active
     from {{ ref('stg_lifecycle_events') }}
     group by user_id
 ),
@@ -17,9 +17,11 @@ user_purchases as (
     select
         buyer_id,
         count(*) as total_purchases,
-        sum(price) as lifetime_value,
-        min(purchased_at) as first_purchase_date,
-        max(purchased_at) as last_purchase_date
+        sum(purchase_amount) as lifetime_value,
+        sum(platform_fee) as total_fees,
+        sum(seller_payout) as total_payout,
+        min(purchase_date) as first_purchase_date,
+        max(purchase_date) as last_purchase_date
     from {{ ref('stg_purchases') }}
     group by buyer_id
 ),
@@ -36,7 +38,7 @@ user_listings as (
 
 select
     ub.user_id,
-    ub.signup_at,
+    ub.signup_date,
     ub.country,
     ub.city,    
     ub.age_group,
@@ -48,7 +50,7 @@ select
     ub.status,
 
     -- Activity metrics
-    coalesce(ua.first_event_date, ub.signup_at) as first_seen_at,
+    coalesce(ua.first_event_date, ub.signup_date) as first_seen_at,
     ua.last_event_date as last_seen_at,
     ua.days_active,
 
@@ -72,8 +74,8 @@ select
     end as user_segment,
 
     case
-        when date_diff(current_date(), coalesce(date(ua.last_event_date), date(ub.signup_at)), day) <= 30 then 'Active'
-        when date_diff(current_date(), coalesce(date(ua.last_event_date), date(ub.signup_at)), day) <= 90 then 'At Risk'
+        when date_diff(current_date(), coalesce(date(ua.last_event_date), date(ub.signup_date)), day) <= 30 then 'Active'
+        when date_diff(current_date(), coalesce(date(ua.last_event_date), date(ub.signup_date)), day) <= 90 then 'At Risk'
         else 'Churned'
     end as activity_status,
 

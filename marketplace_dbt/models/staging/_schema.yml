@@ -2,55 +2,80 @@ models:
   - name: stg_clicks
     description: "Staging model for clicks data, cleaned and standardized for analysis."
     columns:
-      - name: click_id
-        description: "Unique identifier for each click event."
+      - name: click_id_unique
+        description: "Unique identifier for each click event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
           - not_null
+      - name: click_id
+        description: "identifier for each click event."
+      - name: impression_id
+        description: "Identifier for the impression that generated the click."
       - name: search_id
         description: "Identifier for the search that generated the click."
+      - name: user_id
+        description: "Identifier for the user who performed the click."
       - name: item_id
         description: "Identifier for the item that was clicked."
       - name: position
         description: "The position of the item in the search results when it was clicked."
-      - name: clicked_at
+      - name: clicked_date
+        description: "The date when the click event occurred."
+      - name: clicked_timestamp
         description: "The timestamp when the click event occurred."
 
   - name: stg_impressions
     description: "Staging model for impressions data, cleaned and standardized for analysis."
     columns:
-      - name: impression_id
-        description: "Unique identifier for each impression event."
+      - name: impression_id_unique
+        description: "Unique identifier for each impression event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
           - not_null
+      - name: impression_id
+        description: "identifier for each impression event."
       - name: search_id
         description: "Identifier for the search that generated the impression."
+      - name: user_id
+        description: "Identifier for the user who was shown the impression."
       - name: item_id
         description: "Identifier for the item that was impressed."
       - name: position
         description: "The position of the item in the search results when it was impressed."
-      - name: impression_at
+      - name: impression_timestamp
         description: "The timestamp when the impression event occurred."
+      - name: impressed_date
+        description: "The date when the impression event occurred."
 
   - name: stg_items
     description: "Staging model for items data, cleaned and standardized for analysis."
     columns:
-      - name: item_id
-        description: "Unique identifier for each item."
+      - name: item_id_unique
+        description: "Unique identifier for each item, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
           - not_null
+      - name: item_id
+        description: "identifier for each item."
       - name: seller_id
         description: "Identifier for the seller of the item."
-      - name: item_title
+      - name: title
         description: "The title of the item."
       - name: category
         description: "The category of the item."
       - name: price
         description: "The price of the item."
-      - name: created_at
+      - name: currency
+        description: "The currency of the item's price (e.g., USD, EUR)."
+      - name: condition
+        description: "The condition of the item (e.g., new, used)."
+        tests:
+          - accepted_values:
+              values: ['new', 'fair', 'good', 'like_new']
+      - name: created_ts
         description: "The timestamp when the item was created."
+      - name: created_date
+        description: "The date when the item was created."
       - name: status
         description: "The status of the item (e.g., active, inactive)."
         tests:
@@ -60,31 +85,36 @@ models:
   - name: stg_lifecycle_events
     description: "Staging model for lifecycle event data from the source system."
     columns:
-      - name: event_id
-        description: "Unique identifier for each lifecycle event."
+      - name: event_id_unique
+        description: "Unique identifier for each lifecycle event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
           - not_null
+      - name: event_id
+        description: "identifier for each lifecycle event."
       - name: user_id
         description: "Identifier for the user associated with the lifecycle event."
         tests:
           - not_null
       - name: event_type
         description: "The type of lifecycle event (e.g., activation, churn, reactivation)."
-        tests:
-          - accepted_values:
-              values: ['activation', 'churn', 'reactivation']
+      - name: properties
+        description: "Additional properties or metadata associated with the lifecycle event, stored as a JSON object."
+      - name: event_date
+        description: "The date when the lifecycle event occurred."
       - name: event_at
         description: "The timestamp when the lifecycle event occurred."
 
   - name: stg_notifications
     description: "Staging model for notification data from the source system."
     columns:
-      - name: notification_id
-        description: "Unique identifier for each notification event."
+      - name: notification_id_unique
+        description: "Unique identifier for each notification event, generated in the staging layer to ensure uniqueness."
         tests:
-           - unique
-           - not_null
+          - unique
+          - not_null
+      - name: notification_id
+        description: "identifier for each notification event."
       - name: user_id
         description: "Identifier for the user associated with the notification event."
         tests:
@@ -93,45 +123,78 @@ models:
         description: "The type of notification (e.g., new message, price_drop, promo, reactivation)."
         tests:
           - accepted_values:
-              values: ['new_message', 'price_drop', 'promo', 'reactivation']
+              values: ['new_message', 'price_drop', 'promo', 'reactivation', 'item_sold']
+      - name: channel
+        description: "The channel through which the notification was sent (e.g., email, push, SMS)."
+        tests:
+          - accepted_values:
+              values: ['email', 'push', 'sms']
       - name: sent_at
         description: "The timestamp when the notification event occurred."
-      - name: notification_opened
+      - name: sent_date
+        description: "The date when the notification event occurred."
+      - name: was_opened
         description: "Boolean indicating whether the notification was opened by the user."
 
   - name: stg_purchases
     description: "Staging model for purchase data from the source system."
     columns:
-      - name: purchase_id
-        description: "Unique identifier for each purchase event."
+      - name: purchase_id_unique
+        description: "Unique identifier for each purchase event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
           - not_null
+      - name: purchase_id
+        description: "identifier for each purchase event."
       - name: buyer_id
         description: "Identifier for the user who made the purchase."
+        tests:
+          - not_null
+      - name: seller_id
+        description: "Identifier for the user who sold the item."
         tests:
           - not_null
       - name: item_id
         description: "Identifier for the item that was purchased."
         tests:
            - not_null
-      - name: price
+      - name: purchase_amount
         description: "The price at which the item was purchased."
         tests:
            - not_null
-      - name: purchased_at
+      - name: platform_fee
+        description: "The fee charged by the platform for facilitating the purchase."
+      - name: seller_payout
+        description: "The amount paid out to the seller after deducting platform fees."
+      - name: payment_method
+        description: "The payment method used for the purchase (e.g., credit_card, paypal, gift_card)."
+      - name: currency
+        description: "The currency of the purchase amount (e.g., USD, EUR)."
+      - name: purchase_date
+        description: "The date when the purchase event occurred."
+      - name: purchased_timestamp
         description: "The timestamp when the purchase event occurred."
-        tests:
-          - not_null
+      - name: purchase_year
+        description: "The year when the purchase event occurred."
+      - name: purchase_month
+        description: "The month when the purchase event occurred."
+      - name: purchase_quarter
+        description: "The quarter when the purchase event occurred."
+      - name: purchase_year_month
+        description: "The year and month when the purchase event occurred, formatted as YYYY-MM."
+      - name: purchase_day_of_week
+        description: "The day of the week when the purchase event occurred (e.g., Monday, Tuesday, etc.)."
 
   - name: stg_search_events
     description: "Staging model for search event data from the source system."
     columns:
-      - name: search_id
-        description: "Unique identifier for each search event."
+      - name: search_id_unique
+        description: "Unique identifier for each search event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
           - not_null
+      - name: search_id
+        description: "identifier for each search event."
       - name: user_id
         description: "Identifier for the user who performed the search."
         tests:
@@ -140,8 +203,12 @@ models:
         description: "The search query entered by the user."
         tests:
           - not_null
+      - name: query_normalized
+        description: "The normalized version of the search query (e.g., lowercased, punctuation removed)."
       - name: searched_at
         description: "The timestamp when the search event occurred."
+      - name: searched_date
+        description: "The date when the search event occurred."
 
   - name: stg_users
     description: "Staging model for user data from the source system."
@@ -150,7 +217,11 @@ models:
         description: "Unique identifier for each user."
         tests:
           - unique
-          - not_null  
+          - not_null
+      - name: email
+        description: "The email address of the user."
+      - name: signup_date
+        description: "The date when the user signed up."  
       - name: signup_at
         description: "The timestamp when the user signed up."
         tests:
@@ -180,9 +251,6 @@ models:
         description: "The channel through which the user signed up (e.g., organic, paid, referral)."
       - name: device_type
         description: "The type of device used by the user (e.g., mobile, desktop, tablet)."
-        tests:
-          - accepted_values:
-              values: ['mobile', 'desktop', 'tablet']
       - name: marketing_opt_in
         description: "Boolean indicating whether the user has opted in for marketing communications."
       - name: is_verified

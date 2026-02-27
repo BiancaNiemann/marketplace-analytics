@@ -11,7 +11,7 @@ default_args = {
 with DAG(
     dag_id="dbt_bigquery_pipeline",
     start_date=datetime(2024, 1, 1),
-    schedule_interval="@daily",
+    schedule_interval="@monthly",
     catchup=False,
     default_args=default_args,
 ) as dag:

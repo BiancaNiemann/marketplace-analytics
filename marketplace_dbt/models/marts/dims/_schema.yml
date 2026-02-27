@@ -7,7 +7,7 @@ models:
         tests:
           - unique
           - not_null  
-      - name: signup_at
+      - name: signup_date
         description: "The timestamp when the user signed up."
         tests:
           - not_null
