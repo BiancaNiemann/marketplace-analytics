@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='event_id_unique',
+        unique_key='event_key',
         on_schema_change='sync_all_columns',
         partition_by={
             'field': 'event_date', 
@@ -21,7 +21,7 @@ with source as (
 renamed as (
      select
         -- IDs
-        {{ dbt_utils.generate_surrogate_key(['event_id', 'event_date']) }} as event_id_unique,
+        {{ generate_monthly_key('event_id', 'event_date') }} as event_key,
         cast(event_id as int64) as event_id, -- Original event_id from source, kept for reference but not unique
         cast(user_id as int64) as user_id,
 

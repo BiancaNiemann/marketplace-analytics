@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='search_id_unique',
+        unique_key='search_key',
         on_schema_change='sync_all_columns',
         partition_by={
             'field': 'search_date', 
@@ -22,7 +22,7 @@ with source as (
 renamed as (
     select
         -- IDs
-        {{ dbt_utils.generate_surrogate_key(['search_id', 'search_date']) }} as search_id_unique,
+        {{ generate_monthly_key('sea_id', 'search_date') }} as search_key,
         cast(search_id as int64) as search_id, -- Original search_id from source, kept for reference but not unique
         cast(user_id as int64) as user_id,
 

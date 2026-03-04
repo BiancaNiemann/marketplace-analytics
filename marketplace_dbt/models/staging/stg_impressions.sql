@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='impression_id_unique',
+        unique_key='impression_key',
         on_schema_change='sync_all_columns',
         partition_by={
             'field': 'impression_date', 
@@ -22,7 +22,9 @@ with source as (
 renamed as (
      select
         -- IDs
-        {{ dbt_utils.generate_surrogate_key(['impression_id', 'impression_date']) }} as impression_id_unique,
+        {{ generate_monthly_key('impression_id', 'impression_date') }} as impression_key,  -- Surrogate key for the impression, combining impression_id and date to ensure uniqueness
+        {{ generate_monthly_key('item_id', 'impression_date') }} as item_key, 
+        {{ generate_monthly_key('user_id', 'impression_date') }} as user_key,
         cast(impression_id as int64) as impression_id,  -- Original impression_id from source, kept for reference but not unique
         cast(search_id as int64) as search_id,
         cast(user_id as int64) as user_id,

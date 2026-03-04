@@ -46,9 +46,9 @@ def generate_monthly_data(**context):
     os.makedirs(output_dir, exist_ok=True)
     
     # Set Google Cloud credentials
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.expanduser(
-        '~/.keys/service-account-key.json'
-    )
+   # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.expanduser(
+      #   '~/.keys/service-account-key.json'
+   # )
     
     print(f"Generating data for {year_month}")
     print(f"Output directory: {output_dir}")

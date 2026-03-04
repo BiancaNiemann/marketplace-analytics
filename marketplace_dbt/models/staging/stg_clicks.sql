@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='click_id_unique',
+        unique_key='click_key',
         on_schema_change='sync_all_columns',
         partition_by={
             'field': 'click_date', 
@@ -22,7 +22,9 @@ with source as (
 renamed as (
      select
         -- IDs
-        {{ dbt_utils.generate_surrogate_key(['click_id', 'click_date']) }} as click_id_unique,
+        {{ generate_monthly_key('click_id', 'click_date') }} as click_key,
+        {{ generate_monthly_key('item_id', 'click_date') }} as item_key,  
+        {{ generate_monthly_key('user_id', 'click_date') }} as user_key,
         cast(click_id as int64) as click_id,  -- Original click_id from source, kept for reference but not unique
         cast(impression_id as int64) as impression_id,
         cast(search_id as int64) as search_id,

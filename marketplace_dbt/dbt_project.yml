@@ -26,9 +26,6 @@ models:
       dims:
         +materialized: table
         +schema: marts
-        +tags:
-          - "marts"
-          - "dimension"
       
       facts:
        +materialized: table

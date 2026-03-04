@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='item_id_unique',
+        unique_key='item_key',
         on_schema_change='sync_all_columns',
         partition_by={
             'field': 'listed_date', 
@@ -21,7 +21,7 @@ with source as (
 renamed as (
     select
         -- IDs
-        {{ dbt_utils.generate_surrogate_key(['item_id', 'listed_date']) }} as item_id_unique,
+        {{ generate_monthly_key('item_id', 'listed_date') }} as item_key,  -- Surrogate key for the item, combining item_id and listed_date to ensure uniqueness
         cast(item_id as int64) as item_id, -- Original item_id from source, kept for reference but not unique
         cast(seller_id as int64) as seller_id,
 

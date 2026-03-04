@@ -2,7 +2,7 @@ models:
   - name: stg_clicks
     description: "Staging model for clicks data, cleaned and standardized for analysis."
     columns:
-      - name: click_id_unique
+      - name: click_key
         description: "Unique identifier for each click event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
@@ -27,7 +27,7 @@ models:
   - name: stg_impressions
     description: "Staging model for impressions data, cleaned and standardized for analysis."
     columns:
-      - name: impression_id_unique
+      - name: impression_key
         description: "Unique identifier for each impression event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
@@ -50,7 +50,7 @@ models:
   - name: stg_items
     description: "Staging model for items data, cleaned and standardized for analysis."
     columns:
-      - name: item_id_unique
+      - name: item_key
         description: "Unique identifier for each item, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
@@ -85,7 +85,7 @@ models:
   - name: stg_lifecycle_events
     description: "Staging model for lifecycle event data from the source system."
     columns:
-      - name: event_id_unique
+      - name: event_key
         description: "Unique identifier for each lifecycle event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
@@ -108,7 +108,7 @@ models:
   - name: stg_notifications
     description: "Staging model for notification data from the source system."
     columns:
-      - name: notification_id_unique
+      - name: notification_key
         description: "Unique identifier for each notification event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
@@ -139,7 +139,7 @@ models:
   - name: stg_purchases
     description: "Staging model for purchase data from the source system."
     columns:
-      - name: purchase_id_unique
+      - name: purchase_key
         description: "Unique identifier for each purchase event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique
@@ -188,7 +188,7 @@ models:
   - name: stg_search_events
     description: "Staging model for search event data from the source system."
     columns:
-      - name: search_id_unique
+      - name: search_key
         description: "Unique identifier for each search event, generated in the staging layer to ensure uniqueness."
         tests:
           - unique

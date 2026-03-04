@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='purchase_id_unique',
+        unique_key='purchase_key',
         on_schema_change='sync_all_columns',
         partition_by={
             'field': 'purchase_date', 'data_type': 'date'
@@ -22,7 +22,8 @@ with source as (
 renamed as (
      select
         -- IDs
-        {{ dbt_utils.generate_surrogate_key(['purchase_id', 'purchase_date']) }} as purchase_id_unique,
+        {{ generate_monthly_key('purchase_id', 'purchase_date') }} as purchase_key,
+        {{ generate_monthly_key('item_id', 'purchase_date') }} as item_key,
         cast(purchase_id as int64) as purchase_id, -- Original purchase_id from source, kept for reference but not unique
         cast(buyer_id as int64) as buyer_id,
         cast(seller_id as int64) as seller_id,
