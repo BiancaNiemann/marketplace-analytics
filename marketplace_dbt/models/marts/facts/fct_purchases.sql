@@ -30,13 +30,13 @@ item as (
 )
 
 select
+    p.purchase_key,
     p.purchase_id,
-    p.item_id,
+    p.item_key as item_id,
     p.buyer_id as user_id,
     i.seller_id,
 
     --Timestamps
-    p.purchase_timestamp,
     p.purchase_date,
     purchase_year,
     purchase_month, 

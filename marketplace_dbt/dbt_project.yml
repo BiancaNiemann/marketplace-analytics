@@ -20,13 +20,15 @@ models:
        +materialized: view
        +schema: staging
 
-    # Marts layer
     marts:
-      # Dimension tables
       dims:
         +materialized: table
         +schema: marts
       
       facts:
+       +materialized: table
+       +schema: marts 
+
+      analytics:
        +materialized: table
        +schema: marts 

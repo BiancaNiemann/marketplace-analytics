@@ -24,7 +24,6 @@ renamed as (
         -- IDs
         {{ generate_monthly_key('click_id', 'click_date') }} as click_key,
         {{ generate_monthly_key('item_id', 'click_date') }} as item_key,  
-        {{ generate_monthly_key('user_id', 'click_date') }} as user_key,
         cast(click_id as int64) as click_id,  -- Original click_id from source, kept for reference but not unique
         cast(impression_id as int64) as impression_id,
         cast(search_id as int64) as search_id,

@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: stg_clicks
     description: "Staging model for clicks data, cleaned and standardized for analysis."

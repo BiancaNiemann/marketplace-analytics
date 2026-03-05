@@ -1,0 +1,170 @@
+version: 2
+
+models:
+  - name: mart_daily_marketplace_metrics
+    description: "Daily aggregated KPIs for overall marketplace health and performance"
+    config:
+      tags: ['mart', 'daily', 'incremental']
+    columns:
+      - name: metric_date
+        description: "Date for which metrics are calculated"
+        tests:
+          - unique
+          - not_null
+      - name: purchases
+        description: "Total number of purchases on this date"
+        tests:
+          - not_null
+      - name: gross_merchandise_value
+        description: "Total GMV (sum of all purchase amounts)"
+        tests:
+          - not_null
+      - name: platform_revenue
+        description: "Platform fees collected"
+        tests:
+          - not_null
+      - name: average_order_value
+        description: "Average order value (GMV / purchases)"
+      - name: new_listings
+        description: "Number of new items listed"
+      - name: items_sold
+        description: "Number of items sold"
+      - name: sell_through_rate
+        description: "Percentage of listed items that were sold"
+      - name: new_users
+        description: "Number of new user signups"
+      - name: daily_active_users
+        description: "Number of unique users active on this date"
+      - name: buyers
+        description: "Number of unique buyers on this date"
+      - name: sellers
+        description: "Number of unique sellers on this date"
+      - name: impressions
+        description: "Total number of item impressions"
+      - name: searches
+        description: "Total number of searches performed"
+      - name: users_searching
+        description: "Number of unique users performing searches"
+      - name: dbt_updated_at
+        description: "Timestamp of when this record was last updated by dbt"
+
+  - name: mart_seller_performance
+    description: "Aggregated performance metrics for each seller"
+    config:
+      tags: ['mart', 'seller', 'daily']
+    columns:
+      - name: seller_id
+        description: "Unique seller identifier"
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_users')
+              field: user_id
+      - name: total_listings
+        description: "Total number of items listed by seller"
+      - name: active_listings
+        description: "Number of currently active listings"
+      - name: sold_listings
+        description: "Number of items sold"
+      - name: sell_through_rate
+        description: "Percentage of listings that were sold"
+      - name: avg_listing_price
+        description: "Average price of items listed by seller"
+      - name: total_sales
+        description: "Total number of sales made by seller"
+      - name: total_revenue
+        description: "Total revenue generated"
+      - name: net_revenue
+        description: "Revenue after platform fees"
+      - name: avg_sale_price
+        description: "Average price of items sold by seller"
+      - name: total_impressions
+        description: "Total number of impressions for seller's listings"
+      - name: total_clicks
+        description: "Total number of clicks on seller's listings"
+      - name: avg_click_through_rate
+        description: "Average click-through rate for seller's listings"
+      - name: first_listing_date
+        description: "Date of seller's first listing"
+      - name: last_listing_date
+        description: "Date of seller's most recent listing"
+      - name: first_sale_date
+        description: "Date of seller's first sale"
+      - name: last_sale_date
+        description: "Date of seller's most recent sale"
+      - name: days_since_last_listing
+        description: "Number of days since seller's last listing"
+      - name: seller_tier
+        description: "Seller classification based on sales volume"
+        tests:
+          - accepted_values:
+              values: ['Power Seller', 'Active Seller', 'Casual Seller', 'New Seller']
+
+  - name: mart_product_category_performance
+    description: "Performance metrics aggregated by product category and subcategory"
+    config:
+      tags: ['mart', 'category', 'daily']
+    columns:
+      - name: category
+        description: "Primary product category"
+        tests:
+          - not_null
+      - name: sub_category
+        description: "Product subcategory"
+      - name: total_listings
+        description: "Total number of listings in this category"
+      - name: active_listings
+        description: "Number of currently active listings in this category"
+      - name: sold_listings
+        description: "Number of items sold in this category"
+      - name: removed_listings
+        description: "Number of listings removed from this category"
+      - name: sell_through_rate
+        description: "Percentage of listings sold"   
+      - name: avg_price
+        description: "Average price of items in this category"
+      - name: avg_sale_price
+        description: "Average price of items sold in this category"  
+      - name: total_sales
+        description: "Total number of sales in this category"
+      - name: total_revenue
+        description: "Total revenue from this category"
+      - name: avg_days_to_sell
+        description: "Average time from listing to sale"
+      - name: total_impressions
+        description: "Total number of impressions for listings in this category"
+      - name: total_clicks
+        description: "Total number of clicks on listings in this category"
+      - name: avg_click_through_rate
+        description: "Average click-through rate for listings in this category" 
+      - name: click_to_purchase_rate
+        description: "Percentage of clicks that resulted in a purchase"
+      - name: dbt_updated_at
+        description: "Timestamp of when this record was last updated by dbt"
+
+  - name: mart_user_cohort_retention
+    description: "Monthly cohort retention analysis"
+    config:
+      tags: ['mart', 'retention', 'daily']
+    columns:
+      - name: cohort_month
+        description: "Month when users signed up"
+        tests:
+          - not_null
+      - name: cohort_size
+        description: "Number of users in this cohort"
+        tests:
+          - not_null
+      - name: activity_month
+        description: "Month of activity being measured"
+        tests:
+          - not_null
+      - name: months_since_signup
+        description: "Number of months since cohort signup"
+      - name: active_users
+        description: "Number of users from cohort active in this month"
+      - name: retention_rate
+        description: "Percentage of cohort still active (active_users / cohort_size)"
+      - name: dbt_updated_at
+        description: "Timestamp of when this record was last updated by dbt"

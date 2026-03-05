@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: dim_users
     description: "Dimension table containing all user attributes, segmentation, and lifetime metrics."
@@ -65,5 +67,51 @@ models:
         tests:
           - accepted_values:
               values: ['Active', 'At Risk', 'Churned']
+      - name: dbt_updated_at
+        description: "The timestamp when the record was last updated in the database."
+  
+  - name: dim_items
+    description: "Dimension table containing all item attributes and segmentation."
+    columns: 
+      - name: item_key  
+        description: "Unique identifier for each item created combining item_id and date with generate_surrogate_key."
+        tests:
+          - unique
+          - not_null  
+      - name: seller_id
+        description: "The user_id of the seller who listed the item."
+        tests:
+          - not_null
+      - name: title
+        description: "The title of the item."
+      - name: category
+        description: "The category to which the item belongs (e.g., electronics, fashion, home)."
+      - name: condition
+        description: "The condition of the item (e.g., new, used, refurbished)."
+      - name: price
+        description: "The price of the item."
+        tests:
+          - not_null
+      - name: listed_date
+        description: "The date when the item was listed."
+      - name: status
+        description: "The current status of the item (e.g., available, sold, removed)."
+        tests:
+          - accepted_values:
+              values: ['active', 'sold', 'removed']
+      - name: sold_date
+        description: "The timestamp when the item was sold (if applicable)."
+      - name: unique_viewers
+        description: "The number of unique users who viewed the item."
+      - name: unique_clickers
+        description: "The number of unique users who clicked on the item."
+      - name: total_views
+        description: "The total number of views the item received."
+      - name: total_clicks
+        description: "The total number of clicks the item received."
+      - name: click_through_rate
+        description: "The click-through rate (CTR) for the item, calculated as total_clicks divided by total_views."
+      - name: days_to_sell
+        description: "The number of days it took for the item to sell from the listed_date."
       - name: dbt_updated_at
         description: "The timestamp when the record was last updated in the database."

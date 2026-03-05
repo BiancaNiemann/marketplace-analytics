@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: fct_purchases
+    description: "Fact table containing all sales transactions, including revenue, quantity, and associated user and product information."
+    columns:
+      - name: purchase_key
+        description: "Unique identifier for each purchase transaction."
+        tests:
+          - unique
+          - not_null
+      - name: purchase_id
+        description: "The original purchase ID from the source system, used for traceability and debugging."
+      - name: item_key
+        description: "Foreign key linking to the dim_items table, indicating which item was sold."
+      - name: user_id
+        description: "Foreign key linking to the dim_users table, indicating which user made the purchase."
+        tests:
+          - not_null
+      - name: seller_id
+        description: "Foreign key linking to the dim_items table, indicating which user sold the item."
+        tests:
+          - not_null
+      - name: purchase_date
+        description: "The date when the purchase was made."
+        tests:
+          - not_null
+      - name: purchase_year
+        description: "The year when the purchase was made, extracted from purchase_date."
+      - name: purchase_month
+        description: "The month when the purchase was made, extracted from purchase_date."
+      - name: purchase_quarter
+        description: "The quarter when the purchase was made, extracted from purchase_date."
+      - name: purchase_year_month
+        description: "The year and month when the purchase was made, extracted from purchase_date."
+      - name: purchase_day_of_week
+        description: "The day of the week when the purchase was made, extracted from purchase_date."
+      - name: purchase_amount
+        description: "The total amount of the purchase"
+      - name: platform_fee
+        description: "The fee charged by the platform for facilitating the transaction."
+      - name: seller_payout
+        description: "The amount paid out to the seller after deducting platform fees."
+      - name: payment_method
+        description: "The method used for payment (e.g., credit card, PayPal, bank transfer)."
+      - name: title
+        description: "The title of the item purchased, denormalized from dim_items for easier analysis."
+      - name: category
+        description: "The category of the item purchased, denormalized from dim_items for easier analysis."
+      - name: condition
+        description: "The condition of the item purchased, denormalized from dim_items for easier analysis."
+      - name: dbt_updated_at
+        description: "The timestamp when the record was last updated in the database."
+
+  - name: fct_item_engagement
+    description: "Fact table containing all user interactions with items, including clicks and impressions."
+    columns:
+      - name: item_key
+        description: "Foreign key linking the tables, indicating which item was engaged with"
+        tests:
+          - not_null
+      - name: event_date  
+        description: "The date when the event occurred."
+      - name: seller_id
+        description: "Foreign key linking to the dim_items table, indicating which user is the seller of the item."
+        tests:
+          - not_null
+      - name: category
+        description: "The category of the item engaged with, denormalized from dim_items for easier analysis."
+      - name: title
+        description: "The title of the item engaged with, denormalized from dim_items for easier analysis."
+      - name: price 
+        description: "The price of the item engaged with, denormalized from dim_items for easier analysis."
+      - name: impressions 
+        description: "The number of times the item was viewed by users."
+      - name: unique_viewerss
+        description: "The number of unique users who viewed the item."
+      - name: clicks
+        description: "The number of times users clicked on the item."
+      - name: unique_clickers
+        description: "The number of unique users who clicked on the item."
+      - name: click_through_rate
+        description: "The ratio of clicks to impressions for the item, calculated as clicks divided by impressions."
+      - name: dbt_updated_at
+        description: "The timestamp when the record was last updated in the database."
